@@ -1,11 +1,11 @@
 const { runQueryWithPlaceholder } = require("./Database")
 
-const storeMidResult = async ({ RollNo, courseID, semesterID, marks },ret) => {
-    const res = await runQueryWithPlaceholder(`INSERT INTO midresult(Course_ID,Student_ID,Semester_ID,Marks) VALUES (?,?,?,?)`,[courseID,RollNo,semesterID,marks])
+const storeMidResult = async ({ RollNo, courseCode, semesterID, marks },ret) => {
+    const res = await runQueryWithPlaceholder(`INSERT INTO midresult(CourseCode,Student_ID,Semester_ID,Marks) VALUES (?,?,?,?)`,[courseCode,RollNo,semesterID,marks])
     if (res.errno) {
         switch (res.errno) {
             case 1062:
-                const res1 = await runQueryWithPlaceholder(`UPDATE  midresult SET Marks=? WHERE Course_ID=? AND Student_ID=? AND Semester_ID=?`,[marks,courseID,RollNo,semesterID])
+                const res1 = await runQueryWithPlaceholder(`UPDATE  midresult SET Marks=? WHERE CourseCode=? AND Student_ID=? AND Semester_ID=?`,[marks,courseCode,RollNo,semesterID])
                 return ret.status(200).json("Updated")
                 break;
             default:
@@ -15,12 +15,12 @@ const storeMidResult = async ({ RollNo, courseID, semesterID, marks },ret) => {
     }
     return ret.status(200).json("Inserted")
 }
-const storeFinalResult = async ({ RollNo, courseID, semesterID,Quiz,Presentation,Assignment, marks },ret) => {
-    const res = await runQueryWithPlaceholder(`INSERT INTO finalresult(Course_ID,Student_ID,Semester_ID,Quiz,Presentation,Assignment,Marks) VALUES (?,?,?,?,?,?,?)`,[courseID,RollNo,semesterID,Quiz,Presentation,Assignment,marks])
+const storeFinalResult = async ({ RollNo, courseCode, semesterID,Quiz,Presentation,Assignment, marks },ret) => {
+    const res = await runQueryWithPlaceholder(`INSERT INTO finalresult(CourseCode,Student_ID,Semester_ID,Quiz,Presentation,Assignment,Marks) VALUES (?,?,?,?,?,?,?)`,[courseCode,RollNo,semesterID,Quiz,Presentation,Assignment,marks])
     if (res.errno) {
         switch (res.errno) {
             case 1062:
-                const res1 = await runQueryWithPlaceholder(`UPDATE finalresult SET Quiz=?,Presentation=?,Assignment=?,Marks=? WHERE Course_ID=? AND Student_ID=? AND Semester_ID=?`,[Quiz,Presentation,Assignment,marks,courseID,RollNo,semesterID])
+                const res1 = await runQueryWithPlaceholder(`UPDATE finalresult SET Quiz=?,Presentation=?,Assignment=?,Marks=? WHERE CourseCode=? AND Student_ID=? AND Semester_ID=?`,[Quiz,Presentation,Assignment,marks,courseCode,RollNo,semesterID])
                 return ret.status(200).json("Updated")
                 break;
             default:

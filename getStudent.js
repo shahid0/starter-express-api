@@ -1,8 +1,8 @@
-const { runQuery } = require("./Database")
+const { runQueryWithPlaceholder } = require("./Database")
 
 
 const getStudents = async ({ DepartmentID, Session }, res) => {
-    const students = await runQuery(`SELECT ID,Name FROM student WHERE Department_ID=${DepartmentID} AND Session='${Session}'`)
+    const students = await runQueryWithPlaceholder(`SELECT ID,Name FROM student WHERE Department_ID=? AND Session=?`,[DepartmentID,Session])
     if(students.errno){
         return res.status(501).json("DB Error")
     }else if(students.length){
